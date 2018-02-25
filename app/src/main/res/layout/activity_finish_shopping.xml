@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.smartpay.android.activity.FinishShopping"
+    tools:context=".shopping.activity.FinishShopping"
     android:weightSum="1">
 
 
@@ -32,6 +32,13 @@
         tools:layout_editor_absoluteY="263dp"
         tools:layout_editor_absoluteX="137dp"
         android:id="@+id/totalamount" />
+
+    <Button
+        android:id="@+id/payNowButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/pay_now"
+        android:onClick="launchPaymentModule"/>
 
 
 </LinearLayout>

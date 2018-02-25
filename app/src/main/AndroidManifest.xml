@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -16,10 +16,10 @@
         android:theme="@style/AppTheme"
         tools:replace="android:supportsRtl">
         <activity
-            android:name="com.smartpay.android.activity.MainActivity"
+            android:name=".shopping.activity.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name="com.smartpay.android.activity.LogIn">
+        <activity android:name=".shopping.activity.LogIn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -27,18 +27,18 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.smartpay.android.activity.ScannerActivity"
-            android:parentActivityName="com.smartpay.android.activity.MainActivity" />
-        <activity android:name="com.smartpay.android.activity.ShopActivity" />
+            android:name=".shopping.activity.ScannerActivity"
+            android:parentActivityName=".shopping.activity.MainActivity" />
+        <activity android:name=".shopping.activity.ShopActivity" />
         <activity
-            android:name="com.smartpay.android.activity.LocateShops"
-            android:parentActivityName="com.smartpay.android.activity.MainActivity" />
+            android:name=".shopping.activity.LocateShops"
+            android:parentActivityName=".shopping.activity.MainActivity" />
         <activity
-            android:name="com.smartpay.android.activity.History"
-            android:parentActivityName="com.smartpay.android.activity.MainActivity" />
+            android:name=".shopping.activity.History"
+            android:parentActivityName=".shopping.activity.MainActivity" />
         <activity
-            android:name="com.smartpay.android.activity.SearchProducts"
-            android:parentActivityName="com.smartpay.android.activity.MainActivity" />
+            android:name=".shopping.activity.SearchProducts"
+            android:parentActivityName=".shopping.activity.MainActivity" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -47,17 +47,18 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <activity android:name="com.smartpay.android.activity.FinishShopping" />
+        <activity android:name=".shopping.activity.FinishShopping" />
         <activity
-            android:name="com.smartpay.android.activity.Profile"
+            android:name=".shopping.activity.Profile"
             android:label="@string/title_activity_profile"
-            android:parentActivityName="com.smartpay.android.activity.MainActivity"
+            android:parentActivityName=".shopping.activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.smartpay.android.activity.MainActivity" />
+                android:value=".shopping.activity.MainActivity" />
         </activity>
-        <activity android:name="com.smartpay.android.activity.BillHistoryDetails"></activity>
+        <activity android:name=".shopping.activity.BillHistoryDetails" />
+        <activity android:name=".payment.WalletActivity"></activity>
     </application>
 
 </manifest>

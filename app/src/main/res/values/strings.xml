@@ -22,4 +22,9 @@
     <string name="eg_soap_book">eg: Soap, Book</string>
     <string name="scanned_item_image">Scanned Item Image</string>
     <string name="cannot_be_empty">Cannot Be Empty</string>
+    <string name="pay_now">Pay Now</string>
+    <string name="private_key">Private Key</string>
+    <string name="sample_wallet_address">asdasjhfjdshfj465454</string>
+    <string name="_5350">5350</string>
+    <string name="generate_new_private_key">Generate New Private Key</string>
 </resources>

@@ -4,7 +4,7 @@
     android:id="@+id/activity_locate_shops"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.smartpay.android.activity.LocateShops">
+    tools:context=".shopping.activity.LocateShops">
 
     <com.google.android.gms.maps.MapView
         android:layout_width="match_parent"
