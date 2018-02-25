@@ -31,7 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.smartpay.android.shopping.SmartShopper;
+import com.smartpay.android.shopping.SmartPay;
 import com.smartpay.android.shopping.util.Constants;
 import com.smartpay.android.shopping.util.Preferences;
 
@@ -177,7 +177,7 @@ public class User {
                 Constants.VOLLEY_REQUEST_TIMEOUT,
                 Constants.VOLLEY_REQUEST_RETRIES,
                 Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-        SmartShopper.getInstance(context).addToRequestQueue(jsonArrayRequest);
+        SmartPay.getInstance(context).addToRequestQueue(jsonArrayRequest);
     }
 
     public void save(final Context context, final OnSavedListener onSavedListener){
@@ -240,7 +240,7 @@ public class User {
                 Constants.VOLLEY_REQUEST_TIMEOUT,
                 Constants.VOLLEY_REQUEST_RETRIES,
                 Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-        SmartShopper.getInstance(context).addToRequestQueue(jsonObjectRequest);
+        SmartPay.getInstance(context).addToRequestQueue(jsonObjectRequest);
     }
 
 }

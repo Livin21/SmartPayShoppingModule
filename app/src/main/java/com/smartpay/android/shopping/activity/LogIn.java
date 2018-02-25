@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -15,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ResultCodes;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -24,7 +26,10 @@ import org.json.JSONObject;
 import java.util.Collections;
 import java.util.HashMap;
 
-import com.smartpay.android.shopping.SmartShopper;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.smartpay.android.payment.Wallet;
+import com.smartpay.android.shopping.SmartPay;
 import com.smartpay.android.shopping.util.name_generator.RandomNameGenerator;
 import com.smartpay.android.shopping.util.Constants;
 import com.smartpay.android.shopping.util.Preferences;
@@ -86,6 +91,7 @@ public class LogIn extends AppCompatActivity {
                                                             if (response.getBoolean("success")){
                                                                 String token = response.getString("token");
                                                                 Preferences.saveAuthToken(LogIn.this,token);
+                                                                createAndSaveWallet();
                                                                 startActivity(new Intent(LogIn.this, MainActivity.class));
                                                                 finish();
                                                             }else {
@@ -114,7 +120,7 @@ public class LogIn extends AppCompatActivity {
                                                 Constants.VOLLEY_REQUEST_TIMEOUT,
                                                 Constants.VOLLEY_REQUEST_RETRIES,
                                                 Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-                                        SmartShopper.getInstance(LogIn.this).addToRequestQueue(authenticateRequest);
+                                        SmartPay.getInstance(LogIn.this).addToRequestQueue(authenticateRequest);
                                     } else {
                                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
                                         String fname,lname;
@@ -160,6 +166,9 @@ public class LogIn extends AppCompatActivity {
                                                                                     if (response.getBoolean("success")){
                                                                                         String token = response.getString("token");
                                                                                         Preferences.saveAuthToken(LogIn.this,token);
+
+                                                                                        createAndSaveWallet();
+
                                                                                         startActivity(new Intent(LogIn.this, MainActivity.class));
                                                                                         finish();
                                                                                     }else {
@@ -188,7 +197,7 @@ public class LogIn extends AppCompatActivity {
                                                                         Constants.VOLLEY_REQUEST_TIMEOUT,
                                                                         Constants.VOLLEY_REQUEST_RETRIES,
                                                                         Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-                                                                SmartShopper.getInstance(LogIn.this).addToRequestQueue(authenticateRequest);
+                                                                SmartPay.getInstance(LogIn.this).addToRequestQueue(authenticateRequest);
                                                             }else {
                                                                 Toast.makeText(LogIn.this, "SignUp Failed", Toast.LENGTH_SHORT).show();
                                                                 progressDialog.dismiss();
@@ -214,7 +223,7 @@ public class LogIn extends AppCompatActivity {
                                                 Constants.VOLLEY_REQUEST_TIMEOUT,
                                                 Constants.VOLLEY_REQUEST_RETRIES,
                                                 Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-                                        SmartShopper.getInstance(LogIn.this).addToRequestQueue(signUpRequest);
+                                        SmartPay.getInstance(LogIn.this).addToRequestQueue(signUpRequest);
                                     }
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -235,7 +244,7 @@ public class LogIn extends AppCompatActivity {
                         Constants.VOLLEY_REQUEST_TIMEOUT,
                         Constants.VOLLEY_REQUEST_RETRIES,
                         Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-                SmartShopper.getInstance(LogIn.this).addToRequestQueue(jsonObjectRequest);
+                SmartPay.getInstance(LogIn.this).addToRequestQueue(jsonObjectRequest);
 
             } else {
                 if (resultCode == RESULT_CANCELED) {
@@ -267,5 +276,17 @@ public class LogIn extends AppCompatActivity {
                 builder.create().show();
             }
         }
+    }
+
+    private void createAndSaveWallet() {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("wallets")
+                .add(Wallet.createWallet(this))
+                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        Log.d("WALLET","Success");
+                    }
+                });
     }
 }

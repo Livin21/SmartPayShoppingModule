@@ -43,7 +43,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.smartpay.android.R;
-import com.smartpay.android.shopping.SmartShopper;
+import com.smartpay.android.shopping.SmartPay;
 import com.smartpay.android.shopping.adapter.ScannedItemsListAdapter;
 import com.smartpay.android.shopping.dialog.ItemDetailsDialog;
 import com.smartpay.android.shopping.model.Bill;
@@ -128,7 +128,7 @@ public class ShopActivity extends AppCompatActivity {
                         Constants.VOLLEY_REQUEST_TIMEOUT,
                         Constants.VOLLEY_REQUEST_RETRIES,
                         Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-                SmartShopper.getInstance(ShopActivity.this).addToRequestQueue(itemDetailsRequest);
+                SmartPay.getInstance(ShopActivity.this).addToRequestQueue(itemDetailsRequest);
 
             }else {
                 Toast.makeText(ShopActivity.this, "Not a valid barcode", Toast.LENGTH_SHORT).show();
@@ -333,7 +333,7 @@ public class ShopActivity extends AppCompatActivity {
                     Constants.VOLLEY_REQUEST_TIMEOUT,
                     Constants.VOLLEY_REQUEST_RETRIES,
                     Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-            SmartShopper.getInstance(ShopActivity.this).addToRequestQueue(jsonObjectRequest);
+            SmartPay.getInstance(ShopActivity.this).addToRequestQueue(jsonObjectRequest);
         } catch (JSONException e) {
             e.printStackTrace();
             progressDialog.dismiss();

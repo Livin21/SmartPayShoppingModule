@@ -75,6 +75,24 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/activity_vertical_margin"
                     android:drawableEnd="@drawable/right_arrow"
+                    android:onClick="launchWallet"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
+                    android:drawableRight="@drawable/right_arrow"
+                    android:gravity="center_vertical"
+                    android:text="@string/wallet" />
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:background="@color/colorDivider" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/activity_vertical_margin"
+                    android:drawableEnd="@drawable/right_arrow"
                     android:onClick="launchSettings"
                     android:textAppearance="?android:attr/textAppearanceMedium"
                     android:drawableRight="@drawable/right_arrow"

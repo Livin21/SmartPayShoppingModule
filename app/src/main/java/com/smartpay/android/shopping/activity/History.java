@@ -24,7 +24,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.smartpay.android.R;
-import com.smartpay.android.shopping.SmartShopper;
+import com.smartpay.android.shopping.SmartPay;
 import com.smartpay.android.shopping.adapter.BillHistoryAdapter;
 import com.smartpay.android.shopping.model.BillHistory;
 import com.smartpay.android.shopping.model.BillItem;
@@ -109,7 +109,7 @@ public class History extends AppCompatActivity {
                 Constants.VOLLEY_REQUEST_TIMEOUT,
                 Constants.VOLLEY_REQUEST_RETRIES,
                 Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-        SmartShopper.getInstance(History.this).addToRequestQueue(jsonArrayRequest);
+        SmartPay.getInstance(History.this).addToRequestQueue(jsonArrayRequest);
 
     }
 }

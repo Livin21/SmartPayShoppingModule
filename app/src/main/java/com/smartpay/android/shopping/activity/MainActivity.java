@@ -17,6 +17,7 @@ import android.widget.ImageView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.smartpay.android.R;
+import com.smartpay.android.payment.WalletActivity;
 import com.squareup.picasso.Picasso;
 
 
@@ -136,5 +137,9 @@ public class MainActivity extends AppCompatActivity {
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivity(sharingIntent);
 
+    }
+
+    public void launchWallet(View view) {
+        startActivity(new Intent(this, WalletActivity.class));
     }
 }

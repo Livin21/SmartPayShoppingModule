@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.smartpay.android.R;
-import com.smartpay.android.shopping.SmartShopper;
+import com.smartpay.android.shopping.SmartPay;
 import com.smartpay.android.shopping.adapter.SearchItemListAdapter;
 import com.smartpay.android.shopping.model.Item;
 import com.smartpay.android.shopping.util.Constants;
@@ -128,7 +128,7 @@ public class SearchProducts extends AppCompatActivity {
                                 Constants.VOLLEY_REQUEST_TIMEOUT,
                                 Constants.VOLLEY_REQUEST_RETRIES,
                                 Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-                        SmartShopper.getInstance(SearchProducts.this).addToRequestQueue(itemsRequest);
+                        SmartPay.getInstance(SearchProducts.this).addToRequestQueue(itemsRequest);
                     }
                 },
                 new Response.ErrorListener() {
@@ -151,7 +151,7 @@ public class SearchProducts extends AppCompatActivity {
                 Constants.VOLLEY_REQUEST_TIMEOUT,
                 Constants.VOLLEY_REQUEST_RETRIES,
                 Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-        SmartShopper.getInstance(SearchProducts.this).addToRequestQueue(shopsListRequest);
+        SmartPay.getInstance(SearchProducts.this).addToRequestQueue(shopsListRequest);
 
     }
 

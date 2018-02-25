@@ -38,7 +38,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.smartpay.android.R;
-import com.smartpay.android.shopping.SmartShopper;
+import com.smartpay.android.shopping.SmartPay;
 import com.smartpay.android.shopping.util.Constants;
 import com.smartpay.android.shopping.util.Preferences;
 import com.smartpay.android.shopping.util.UserLocation;
@@ -116,7 +116,7 @@ public class LocateShops extends AppCompatActivity implements OnMapReadyCallback
                 Constants.VOLLEY_REQUEST_TIMEOUT,
                 Constants.VOLLEY_REQUEST_RETRIES,
                 Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-        SmartShopper.getInstance(LocateShops.this).addToRequestQueue(shopsListRequest);
+        SmartPay.getInstance(LocateShops.this).addToRequestQueue(shopsListRequest);
 
     }
 

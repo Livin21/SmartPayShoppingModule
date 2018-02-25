@@ -58,7 +58,13 @@
                 android:value=".shopping.activity.MainActivity" />
         </activity>
         <activity android:name=".shopping.activity.BillHistoryDetails" />
-        <activity android:name=".payment.WalletActivity"></activity>
+        <activity android:name=".payment.WalletActivity"
+            android:parentActivityName=".shopping.activity.MainActivity">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".shopping.activity.MainActivity" />
+        </activity>
     </application>
 
 </manifest>

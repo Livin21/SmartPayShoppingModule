@@ -10,14 +10,14 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.ImageLoader;
 import com.android.volley.toolbox.Volley;
 
-public class SmartShopper{
+public class SmartPay {
 
     private RequestQueue mRequestQueue;
     private ImageLoader mImageLoader;
 
     private Context context;
 
-    private SmartShopper(Context context){
+    private SmartPay(Context context){
         this.context = context;
         smartShopper = this;
         mRequestQueue = getRequestQueue();
@@ -41,12 +41,12 @@ public class SmartShopper{
 
 
     @SuppressLint("StaticFieldLeak")
-    private static SmartShopper smartShopper;
+    private static SmartPay smartShopper;
 
-    public static synchronized SmartShopper getInstance(Context context){
+    public static synchronized SmartPay getInstance(Context context){
 
         if (smartShopper == null)
-            smartShopper = new SmartShopper(context);
+            smartShopper = new SmartPay(context);
 
         return smartShopper;
     }

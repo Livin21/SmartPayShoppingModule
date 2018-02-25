@@ -31,7 +31,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.smartpay.android.R;
-import com.smartpay.android.shopping.SmartShopper;
+import com.smartpay.android.shopping.SmartPay;
 import com.smartpay.android.shopping.util.Constants;
 import com.smartpay.android.shopping.util.Preferences;
 
@@ -98,7 +98,7 @@ public class ScannerActivity extends AppCompatActivity {
                         Constants.VOLLEY_REQUEST_TIMEOUT,
                         Constants.VOLLEY_REQUEST_RETRIES,
                         Constants.VOLLEY_REQUEST_BACKOFF_MULTIPLIER));
-                SmartShopper.getInstance(ScannerActivity.this).addToRequestQueue(jsonObjectRequest);
+                SmartPay.getInstance(ScannerActivity.this).addToRequestQueue(jsonObjectRequest);
             }else {
                 Toast.makeText(ScannerActivity.this, "Not a valid code", Toast.LENGTH_SHORT).show();
                 finish();
