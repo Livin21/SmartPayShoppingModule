@@ -59,11 +59,11 @@ public class BillHistoryItemAdapter extends RecyclerView.Adapter<BillHistoryItem
         TextView itemName,sno,price,amount,qty;
         ViewHolder(View itemView) {
             super(itemView);
-            itemName = (TextView) itemView.findViewById(R.id.item_name_tv);
-            sno = (TextView) itemView.findViewById(R.id.sl_no_tv);
-            price = (TextView) itemView.findViewById(R.id.item_price_tv);
-            amount = (TextView) itemView.findViewById(R.id.amount_tv);
-            qty = (TextView) itemView.findViewById(R.id.item_qty_tv);
+            itemName = itemView.findViewById(R.id.item_name_tv);
+            sno = itemView.findViewById(R.id.sl_no_tv);
+            price = itemView.findViewById(R.id.item_price_tv);
+            amount = itemView.findViewById(R.id.amount_tv);
+            qty = itemView.findViewById(R.id.item_qty_tv);
         }
     }
 }

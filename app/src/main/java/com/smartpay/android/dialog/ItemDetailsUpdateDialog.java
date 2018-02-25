@@ -46,7 +46,7 @@ public class ItemDetailsUpdateDialog extends Dialog {
         ((TextView) findViewById(R.id.scannedItemPrice)).setText(items.get(position).getPrice() + "");
 
 
-        spinner = (Spinner) findViewById(R.id.qtySpinner);
+        spinner = findViewById(R.id.qtySpinner);
         List<String> spinnerArray =  new ArrayList<>();
         spinnerArray.add("Select Quantity");
         spinnerArray.add("1");

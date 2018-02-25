@@ -156,7 +156,7 @@ public class ShopActivity extends AppCompatActivity {
         shopId = getIntent().getStringExtra("shopId");
         shopName = getIntent().getStringExtra("shopName");
 
-        recyclerView = (RecyclerView) findViewById(R.id.scannedItemsList);
+        recyclerView = findViewById(R.id.scannedItemsList);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(mLayoutManager);
 
@@ -170,7 +170,7 @@ public class ShopActivity extends AppCompatActivity {
                     1);
 
         }else {
-            barcodeView = (CompoundBarcodeView) findViewById(R.id.barcode_scanner);
+            barcodeView = findViewById(R.id.barcode_scanner);
             assert barcodeView != null;
             barcodeView.decodeContinuous(barcodeCallback);
         }
@@ -181,7 +181,7 @@ public class ShopActivity extends AppCompatActivity {
 
         switch (requestCode) {
             case 1: {
-                barcodeView = (CompoundBarcodeView) findViewById(R.id.barcode_scanner);
+                barcodeView = findViewById(R.id.barcode_scanner);
                 assert barcodeView != null;
                 barcodeView.decodeSingle(barcodeCallback);
                 break;

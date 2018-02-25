@@ -9,6 +9,6 @@ public class Constants {
     public static final int VOLLEY_REQUEST_RETRIES = 2;
     public static final float VOLLEY_REQUEST_BACKOFF_MULTIPLIER = 2;
 
-    public static final String DELETE_INTENT = "me.jestina.smartshopper.DELETE_ITEM";
+    public static final String DELETE_INTENT = "com.smartpay.android.DELETE_ITEM";
     public static final String GOT_USER_LOCATION_BROADCAST = "GOT_USER_LOCATION";
 }

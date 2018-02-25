@@ -62,9 +62,9 @@ public class BillHistoryAdapter extends RecyclerView.Adapter<BillHistoryAdapter.
         ViewHolder(View itemView) {
             super(itemView);
             root = itemView;
-            shopNameTV = (TextView) itemView.findViewById(R.id.shopNameTV);
-            dateTV = (TextView) itemView.findViewById(R.id.billDateTV);
-            amountTV = (TextView) itemView.findViewById(R.id.billAmountTV);
+            shopNameTV = itemView.findViewById(R.id.shopNameTV);
+            dateTV = itemView.findViewById(R.id.billDateTV);
+            amountTV = itemView.findViewById(R.id.billAmountTV);
         }
     }
 }

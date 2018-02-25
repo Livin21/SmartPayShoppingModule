@@ -60,10 +60,10 @@ public class SearchItemListAdapter extends RecyclerView.Adapter<SearchItemListAd
         ImageView offer;
         ViewHolder(View itemView) {
             super(itemView);
-            itemName = (TextView) itemView.findViewById(R.id.item_name_tv);
-            price = (TextView) itemView.findViewById(R.id.item_price_tv);
-            shopName = (TextView) itemView.findViewById(R.id.item_shop_tv);
-            offer = (ImageView) itemView.findViewById(R.id.offer_tag_icon);
+            itemName = itemView.findViewById(R.id.item_name_tv);
+            price = itemView.findViewById(R.id.item_price_tv);
+            shopName = itemView.findViewById(R.id.item_shop_tv);
+            offer = itemView.findViewById(R.id.offer_tag_icon);
         }
     }
 }

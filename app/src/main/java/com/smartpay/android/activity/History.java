@@ -43,7 +43,7 @@ public class History extends AppCompatActivity {
         assert actionBar!=null;
         actionBar.setTitle("History");
 
-        final RecyclerView billsList = (RecyclerView) findViewById(R.id.billHistoryRecyclerView);
+        final RecyclerView billsList = findViewById(R.id.billHistoryRecyclerView);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         billsList.setLayoutManager(layoutManager);
 
