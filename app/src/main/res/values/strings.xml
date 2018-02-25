@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">SmartPay</string>
+    <string name="action_settings">Settings</string>
+    <string name="locate_shops">Locate Shops</string>
+    <string name="history">Bill History</string>
+    <string name="currenthistory">Current History</string>
+    <string name="search_products">Search Products</string>
+    <string name="title_activity_currenthistory">Current History</string>
+    <string name="userprofileimage">UserProfileImage</string>
+    <string name="open">Open</string>
+    <string name="close">Close</string>
+    <string name="profile">Profile</string>
+    <string name="settings">Settings</string>
+    <string name="feedback">Feedback</string>
+    <string name="rate_app">Rate App</string>
+    <string name="share_app">Share App</string>
+    <string name="_2017">© 2017</string>
+    <string name="offer_available">Offer Available</string>
+    <string name="remove_item">Remove Item</string>
+    <string name="search">Search</string>
+    <string name="title_activity_profile">Profile</string>
+    <string name="eg_soap_book">eg: Soap, Book</string>
+    <string name="scanned_item_image">Scanned Item Image</string>
+    <string name="cannot_be_empty">Cannot Be Empty</string>
+</resources>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.smartpay.android">
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_wallet"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        tools:replace="android:supportsRtl">
+        <activity
+            android:name="com.smartpay.android.activity.MainActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name="com.smartpay.android.activity.LogIn">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.smartpay.android.activity.ScannerActivity"
+            android:parentActivityName="com.smartpay.android.activity.MainActivity" />
+        <activity android:name="com.smartpay.android.activity.ShopActivity" />
+        <activity
+            android:name="com.smartpay.android.activity.LocateShops"
+            android:parentActivityName="com.smartpay.android.activity.MainActivity" />
+        <activity
+            android:name="com.smartpay.android.activity.History"
+            android:parentActivityName="com.smartpay.android.activity.MainActivity" />
+        <activity
+            android:name="com.smartpay.android.activity.SearchProducts"
+            android:parentActivityName="com.smartpay.android.activity.MainActivity" />
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyA5wBSBYG02reRhG1DFwkfxjT7rq7PS8T8" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <activity android:name="com.smartpay.android.activity.FinishShopping" />
+        <activity
+            android:name="com.smartpay.android.activity.Profile"
+            android:label="@string/title_activity_profile"
+            android:parentActivityName="com.smartpay.android.activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.smartpay.android.activity.MainActivity" />
+        </activity>
+        <activity android:name="com.smartpay.android.activity.BillHistoryDetails"></activity>
+    </application>
+
+</manifest>
