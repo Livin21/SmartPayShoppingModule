@@ -1,8 +1,10 @@
 package com.smartpay.android.shopping.activity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ResultCodes;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -280,13 +283,22 @@ public class LogIn extends AppCompatActivity {
 
     private void createAndSaveWallet() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("wallets")
-                .add(Wallet.createWallet(this))
-                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                    @Override
-                    public void onSuccess(DocumentReference documentReference) {
-                        Log.d("WALLET","Success");
-                    }
-                });
+        if (Preferences.getDocumentReference(this).isEmpty()){
+            db.collection("wallets")
+                    .add(Wallet.createWallet(this))
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d("WALLET","Success");
+                            Preferences.saveDocumentReference(LogIn.this, documentReference.getId());
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            e.printStackTrace();
+                        }
+                    });
+        }
     }
 }

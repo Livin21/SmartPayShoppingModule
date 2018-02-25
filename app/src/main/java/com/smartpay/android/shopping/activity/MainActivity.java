@@ -140,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void launchWallet(View view) {
+        drawer.closeDrawer(GravityCompat.START);
         startActivity(new Intent(this, WalletActivity.class));
     }
 }
