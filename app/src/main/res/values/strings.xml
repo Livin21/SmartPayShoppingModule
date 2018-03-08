@@ -28,4 +28,14 @@
     <string name="_5350">5350</string>
     <string name="generate_new_private_key">Generate New Private Key</string>
     <string name="wallet">Wallet</string>
+    <string name="wallet_address_reader">Wallet Address Reader</string>
+    <string name="desc_nfc_tag">Please tap your phone on the NFC Tag to read shop\'s wallet address</string>
+    <string name="no_of_items_purchased">%d Items Purchased</string>
+    <string name="total_amount">Total Amount = Rs. %f</string>
+    <string name="itrm_price">MRP:  ₹ %f/-</string>
+    <string name="serial_no">%d.</string>
+    <string name="item_qty">Quantity: %d pc</string>
+    <string name="item_amount">₹ %f/-</string>
+    <string name="nfc_disabled">NFC is disabled.</string>
+
 </resources>

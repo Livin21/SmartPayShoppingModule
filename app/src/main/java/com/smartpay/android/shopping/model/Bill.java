@@ -19,10 +19,10 @@ public class Bill {
 
     public String generateBill(){
         for (Item item : items){
-            billData += count++ + ". ";
-            billData += item.getItemName() + " ";
-            billData += item.getQty() + " ";
-            billData += item.getPrice() + "\n";
+            billData = billData.concat(count++ + ". ");
+            billData = billData.concat(item.getItemName() + " ");
+            billData = billData.concat(item.getQty() + " ");
+            billData = billData.concat(item.getPrice() + "\n");
         }
         amount = getAmount();
         billData += "Total= " + amount + "\n\n";

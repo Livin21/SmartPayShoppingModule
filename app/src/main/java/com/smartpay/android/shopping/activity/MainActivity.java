@@ -118,8 +118,8 @@ public class MainActivity extends AppCompatActivity {
 
     public void sendFeedBack(View view) {
         drawer.closeDrawer(GravityCompat.START);
-        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:jestinajohn30@gmail.com"));
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Smart Shopper - Feedback");
+        Intent intent = new Intent(Intent.ACTION_SENDTO, Uri.parse("mailto:smartpay@gmail.com"));
+        intent.putExtra(Intent.EXTRA_SUBJECT, "Smart Pay - Feedback");
         startActivity(Intent.createChooser(intent, "Send Feedback"));
     }
 
@@ -132,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
         drawer.closeDrawer(GravityCompat.START);
         Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
         sharingIntent.setType("text/plain");
-        String shareBody = "Download Smart Shopper and Do Smart Shopping..!!!";
+        String shareBody = "Download Smart Pay and Do Smart Shopping..!!!";
         sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Invitation");
         sharingIntent.putExtra(android.content.Intent.EXTRA_TEXT, shareBody);
         startActivity(sharingIntent);

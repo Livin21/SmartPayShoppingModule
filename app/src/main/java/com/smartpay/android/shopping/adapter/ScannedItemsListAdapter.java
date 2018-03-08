@@ -39,10 +39,10 @@ public class ScannedItemsListAdapter extends RecyclerView.Adapter<ScannedItemsLi
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Item item = items.get(position);
         holder.itemName.setText(item.getItemName());
-        holder.price.setText("MRP: ₹ " + item.getPrice() + "/-");
-        holder.sno.setText(String.format("%d.", position + 1));
-        holder.qty.setText("Quantity: " + item.getQty() + " pc");
-        holder.amount.setText("₹ " + (item.getPrice() * item.getQty()) + "/-");
+        holder.price.setText(context.getString(R.string.itrm_price, item.getPrice()));
+        holder.sno.setText(String.format(context.getString(R.string.serial_no), position + 1));
+        holder.qty.setText(context.getString(R.string.item_qty, item.getQty()));
+        holder.amount.setText(context.getString(R.string.item_amount, (item.getPrice() * item.getQty())));
         holder.offer.setImageDrawable(item.hasOffer() ?
                 ContextCompat.getDrawable(context,R.drawable.offer_tag)
         : new ColorDrawable(ContextCompat.getColor(context,R.color.colorTransparent)));
@@ -62,7 +62,6 @@ public class ScannedItemsListAdapter extends RecyclerView.Adapter<ScannedItemsLi
     class ViewHolder extends RecyclerView.ViewHolder {
         TextView itemName,sno,price,amount,qty;
         ImageView offer;
-        int position;
         View rootView;
         ViewHolder(View itemView) {
             super(itemView);
@@ -73,14 +72,6 @@ public class ScannedItemsListAdapter extends RecyclerView.Adapter<ScannedItemsLi
             amount = itemView.findViewById(R.id.amount_tv);
             qty = itemView.findViewById(R.id.item_qty_tv);
             offer = itemView.findViewById(R.id.offer_tag_icon);
-            /*position = Integer.parseInt(sno.getText().charAt(0)+"");
-            position--;
-            itemName.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    new ItemDetailsUpdateDialog(context,items,position,ScannedItemsListAdapter.this).show();
-                }
-            });*/
         }
     }
 }

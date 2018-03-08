@@ -1,30 +1,32 @@
 package com.smartpay.android.shopping.activity;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.zxing.WriterException;
 
 import com.smartpay.android.R;
+import com.smartpay.android.nfc.AddressGrabberActivity;
 import com.smartpay.android.shopping.qrcode.QRCodeHandler;
 
 public class FinishShopping extends AppCompatActivity {
 
     ImageView qrCodeImageView;
     TextView amount,items;
+    double amt;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_finish_shopping);
 
         String bill = getIntent().getStringExtra("BILL");
-        double amt = getIntent().getDoubleExtra("AMOUNT",0);
-        int noofitems = getIntent().getIntExtra("NO_OF_ITEMS",0);
+        amt = getIntent().getDoubleExtra("AMOUNT",0);
+        int noOfItems = getIntent().getIntExtra("NO_OF_ITEMS",0);
         qrCodeImageView = findViewById(R.id.qrcodeimageview);
         try {
             qrCodeImageView.setImageBitmap(QRCodeHandler.generateQRCode(bill,getScreenRes()));
@@ -32,9 +34,9 @@ public class FinishShopping extends AppCompatActivity {
             e.printStackTrace();
         }
         amount = findViewById(R.id.totalamount);
-        amount.setText("Total Amount = Rs."+amt);
+        amount.setText(getString(R.string.total_amount, amt));
         items = findViewById(R.id.totalitems);
-        items.setText(noofitems+" Items Purchased");
+        items.setText(getString(R.string.no_of_items_purchased, noOfItems));
 
     }
     public int getScreenRes() {
@@ -44,6 +46,8 @@ public class FinishShopping extends AppCompatActivity {
     }
 
     public void launchPaymentModule(View view) {
-        Toast.makeText(this, "Payment Module to be initialized", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(this, AddressGrabberActivity.class);
+        intent.putExtra("BILL_AMOUNT", amt);
+        startActivity(intent);
     }
 }
