@@ -25,26 +25,13 @@ public class Transaction implements Serializable {
     private Long when;
     private Double amount;
 
-    private Wallet toWallet, fromWallet;
-
-    public Wallet getToWallet() {
-        return toWallet;
-    }
-
-    public Wallet getFromWallet() {
-        return fromWallet;
-    }
-
-    public String getFromAddress() {
-        return fromAddress;
-    }
+    private Wallet toWallet;
 
     void setFromAddress(String fromAddress) {
         this.fromAddress = fromAddress;
         Wallet.getWallet(fromAddress, new Wallet.OnWalletFetchCompletedListener() {
             @Override
             public void onComplete(Wallet wallet) {
-                fromWallet = wallet;
             }
 
             @Override
@@ -52,10 +39,6 @@ public class Transaction implements Serializable {
                 Log.d("Wallet Fetch", s);
             }
         });
-    }
-
-    public String getToAddress() {
-        return toAddress;
     }
 
     void setToAddress(String toAddress) {
@@ -73,16 +56,8 @@ public class Transaction implements Serializable {
         });
     }
 
-    public Long getWhen() {
-        return when;
-    }
-
     void setWhen(Long when) {
         this.when = when;
-    }
-
-    public Double getAmount() {
-        return amount;
     }
 
     public void setAmount(Double amount) {

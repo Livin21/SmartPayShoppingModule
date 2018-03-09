@@ -55,9 +55,12 @@ public class WalletAddressScannerActivity extends AppCompatActivity {
                                     Toast.makeText(WalletAddressScannerActivity.this, error, Toast.LENGTH_SHORT).show();
                                 }
                             });
-                        else
+                        else {
+                            progressDialog.dismiss();
                             Toast.makeText(WalletAddressScannerActivity.this, "You don't have enough credits to complete this purchase. Please recharge your wallet.", Toast.LENGTH_LONG).show();
-
+                            startActivity(new Intent(WalletAddressScannerActivity.this, WalletActivity.class));
+                            finish();
+                        }
                     }
 
                     @Override
