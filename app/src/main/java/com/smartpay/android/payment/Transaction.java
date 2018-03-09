@@ -2,6 +2,7 @@ package com.smartpay.android.payment;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,7 +41,17 @@ public class Transaction implements Serializable {
 
     void setFromAddress(String fromAddress) {
         this.fromAddress = fromAddress;
-        fromWallet = Wallet.getWallet(fromAddress);
+        Wallet.getWallet(fromAddress, new Wallet.OnWalletFetchCompletedListener() {
+            @Override
+            public void onComplete(Wallet wallet) {
+                fromWallet = wallet;
+            }
+
+            @Override
+            public void onError(String s) {
+                Log.d("Wallet Fetch", s);
+            }
+        });
     }
 
     public String getToAddress() {
@@ -49,7 +60,17 @@ public class Transaction implements Serializable {
 
     void setToAddress(String toAddress) {
         this.toAddress = toAddress;
-        fromWallet = Wallet.getWallet(toAddress);
+        Wallet.getWallet(toAddress, new Wallet.OnWalletFetchCompletedListener() {
+            @Override
+            public void onComplete(Wallet wallet) {
+                toWallet = wallet;
+            }
+
+            @Override
+            public void onError(String s) {
+                Log.d("Wallet Fetch", s);
+            }
+        });
     }
 
     public Long getWhen() {
@@ -68,30 +89,51 @@ public class Transaction implements Serializable {
         this.amount = amount;
     }
 
-    void execute(Context context, final Wallet.OnTransactionCompleteListener onTransactionCompleteListener) {
+    void execute(final Context context, final Wallet.OnTransactionCompleteListener onTransactionCompleteListener) {
 
-        HashMap<String, Object> toWalletMap = new HashMap<>();
-        toWalletMap.put("balance",
-                toWallet.getBalance() + amount
-        );
-        toWalletMap.put("address", toAddress);
-        toWalletMap.put("timestamp", toWallet.getTimestamp());
+        Wallet.getWallet(toAddress, new Wallet.OnWalletFetchCompletedListener() {
+            @Override
+            public void onComplete(Wallet wallet) {
+                final HashMap<String, Object> toWalletMap = new HashMap<>();
+                toWalletMap.put("balance",wallet.getBalance() + amount);
+                toWalletMap.put("address", toAddress);
+                toWalletMap.put("timestamp", wallet.getTimestamp());
 
-        HashMap<String, Object> fromWalletMap = new HashMap<>();
-        fromWalletMap.put("balance",
-                fromWallet.getBalance() - amount
-        );
-        fromWalletMap.put("address", fromAddress);
-        fromWalletMap.put("timestamp", fromWallet.getTimestamp());
+                Wallet.getWallet(fromAddress, new Wallet.OnWalletFetchCompletedListener() {
+                    @Override
+                    public void onComplete(Wallet wallet) {
+                        HashMap<String, Object> fromWalletMap = new HashMap<>();
+                        fromWalletMap.put("balance",wallet.getBalance() - amount);
+                        fromWalletMap.put("address", fromAddress);
+                        fromWalletMap.put("timestamp", wallet.getTimestamp());
 
-        FirebaseFirestore.getInstance().collection("wallets")
-                .document(Preferences.getDocumentReference(context))
-                .update(fromWalletMap);
+                        // Deduct amount from sender's wallet
+                        FirebaseFirestore.getInstance().collection("wallets")
+                                .document(Preferences.getDocumentReference(context))
+                                .update(fromWalletMap);
 
-        FirebaseFirestore.getInstance().collection("wallets")
-                .document(toWallet.getDocumentReference())
-                .update(toWalletMap);
+                        // Add amount to receiver's wallet
+                        FirebaseFirestore.getInstance().collection("wallets")
+                                .document(toWallet.getDocumentReference())
+                                .update(toWalletMap);
 
+                    }
+
+                    @Override
+                    public void onError(String s) {
+                        Log.e("Sender's wallet", s);
+                    }
+                });
+
+            }
+
+            @Override
+            public void onError(String s) {
+                Log.e("Receiver's wallet", s);
+            }
+        });
+
+        // Add transaction details to transactions table
         FirebaseFirestore.getInstance().collection("wallets")
                 .document(Preferences.getDocumentReference(context))
                 .collection("transactions")
@@ -99,9 +141,9 @@ public class Transaction implements Serializable {
                 .addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                     @Override
                     public void onComplete(@NonNull Task<DocumentReference> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             onTransactionCompleteListener.onComplete();
-                        }else {
+                        } else {
                             onTransactionCompleteListener.onError("Transaction couldn't be completed");
                         }
                     }
@@ -118,7 +160,7 @@ public class Transaction implements Serializable {
 
         Transaction transaction;
 
-        Builder(){
+        Builder() {
             transaction = new Transaction();
         }
 

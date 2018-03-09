@@ -14,7 +14,7 @@ import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
-import com.journeyapps.barcodescanner.BarcodeView;
+import com.journeyapps.barcodescanner.CompoundBarcodeView;
 import com.smartpay.android.R;
 import com.smartpay.android.payment.Wallet;
 import com.smartpay.android.payment.WalletActivity;
@@ -23,39 +23,48 @@ import java.util.List;
 
 public class WalletAddressScannerActivity extends AppCompatActivity {
 
-    BarcodeView barcodeView;
+    CompoundBarcodeView barcodeView;
 
 
     private double billAmount;
 
     BarcodeCallback barcodeCallback = new BarcodeCallback() {
         @Override
-        public void barcodeResult(BarcodeResult result) {
+        public void barcodeResult(final BarcodeResult result) {
             if (result.getBarcodeFormat().equals(BarcodeFormat.QR_CODE)) {
                 barcodeView.pause();
                 final ProgressDialog progressDialog = new ProgressDialog(WalletAddressScannerActivity.this);
                 progressDialog.setMessage("Processing Payment. Please Wait...");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
-                Wallet wallet = Wallet.getWallet(WalletAddressScannerActivity.this);
-                if (wallet.getBalance() >= billAmount)
-                    wallet.addTransaction(WalletAddressScannerActivity.this, result.getResult().getText(), billAmount, new Wallet.OnTransactionCompleteListener() {
-                        @Override
-                        public void onComplete() {
-                            progressDialog.dismiss();
-                            Toast.makeText(WalletAddressScannerActivity.this, "Payment Complete", Toast.LENGTH_SHORT).show();
-                            startActivity(new Intent(WalletAddressScannerActivity.this, WalletActivity.class));
-                            finish();
-                        }
+                Wallet.getWallet(WalletAddressScannerActivity.this, new Wallet.OnWalletFetchCompletedListener() {
+                    @Override
+                    public void onComplete(Wallet wallet) {
+                        if (wallet.getBalance() >= billAmount)
+                            wallet.addTransaction(WalletAddressScannerActivity.this, result.getResult().getText(), billAmount, new Wallet.OnTransactionCompleteListener() {
+                                @Override
+                                public void onComplete() {
+                                    progressDialog.dismiss();
+                                    Toast.makeText(WalletAddressScannerActivity.this, "Payment Complete", Toast.LENGTH_SHORT).show();
+                                    startActivity(new Intent(WalletAddressScannerActivity.this, WalletActivity.class));
+                                    finish();
+                                }
 
-                        @Override
-                        public void onError(String error) {
-                            Toast.makeText(WalletAddressScannerActivity.this, error, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                else
-                    Toast.makeText(WalletAddressScannerActivity.this, "You don't have enough credits to complete this purchase. Please recharge your wallet.", Toast.LENGTH_LONG).show();
+                                @Override
+                                public void onError(String error) {
+                                    Toast.makeText(WalletAddressScannerActivity.this, error, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        else
+                            Toast.makeText(WalletAddressScannerActivity.this, "You don't have enough credits to complete this purchase. Please recharge your wallet.", Toast.LENGTH_LONG).show();
 
+                    }
+
+                    @Override
+                    public void onError(String s) {
+                        Toast.makeText(WalletAddressScannerActivity.this, s, Toast.LENGTH_SHORT).show();
+                    }
+                });
 
             }
         }
