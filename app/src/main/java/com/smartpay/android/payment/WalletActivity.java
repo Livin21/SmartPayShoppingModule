@@ -29,11 +29,15 @@ public class WalletActivity extends AppCompatActivity {
 
     TextView balanceTextView;
 
+    Wallet wallet;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wallet);
         setPrivateKeyQRCode();
+
+        wallet = new Wallet();
 
         balanceTextView = findViewById(R.id.balanceTextView);
         final TextView addressTextView = findViewById(R.id.walletAddressTextView);
@@ -52,6 +56,9 @@ public class WalletActivity extends AppCompatActivity {
                         if (task.isSuccessful()) {
                             for (DocumentSnapshot document : task.getResult()) {
                                 if (document.getId().equals(Preferences.getDocumentReference(WalletActivity.this))){
+                                    wallet.setDocumentReference(document.getId());
+                                    wallet.setAddress(document.getString("address"));
+                                    wallet.setBalance(document.getDouble("balance"));
                                     balanceTextView.setText(String.valueOf(document.getDouble("balance")));
                                     addressTextView.setText(document.getString("address"));
                                     break;
@@ -91,6 +98,7 @@ public class WalletActivity extends AppCompatActivity {
         editText.setHint("Enter amount");
         editText.setInputType(InputType.TYPE_NUMBER_FLAG_DECIMAL);
         new AlertDialog.Builder(this)
+                .setTitle("Recharge Wallet")
                 .setView(editText)
                 .setPositiveButton("Buy Credits", new DialogInterface.OnClickListener() {
                     @Override
@@ -103,7 +111,7 @@ public class WalletActivity extends AppCompatActivity {
                                 progressDialog.setMessage("Please Wait...");
                                 progressDialog.setCancelable(false);
                                 progressDialog.show();
-                                Wallet.recharge(rechargeAmount, new Wallet.OnRechargeComplete(){
+                                Wallet.recharge(wallet, rechargeAmount, new Wallet.OnRechargeComplete(){
                                     @Override
                                     public void onComplete(Double newBalance){
                                         progressDialog.dismiss();

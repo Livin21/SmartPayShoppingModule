@@ -145,8 +145,23 @@ public class Wallet {
         this.timestamp = timestamp;
     }
 
-    public static void recharge(Double rechargeAmount, OnRechargeComplete onRechargeComplete) {
-        
+    static void recharge(final Wallet wallet, final Double rechargeAmount, final OnRechargeComplete onRechargeComplete) {
+
+        HashMap<String, Object> hashMap = new HashMap<>();
+        hashMap.put("address", wallet.getAddress());
+        hashMap.put("balance", wallet.getBalance() + rechargeAmount);
+        hashMap.put("last_recharge", System.currentTimeMillis());
+        FirebaseFirestore.getInstance().collection("wallets").document(wallet.getDocumentReference())
+                .update(hashMap).addOnCompleteListener(
+                new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+                            onRechargeComplete.onComplete(wallet.getBalance() + rechargeAmount);
+                        }
+                    }
+                }
+        );
     }
 
     public interface OnTransactionCompleteListener {
