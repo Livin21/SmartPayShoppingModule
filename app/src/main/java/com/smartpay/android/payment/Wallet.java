@@ -145,6 +145,10 @@ public class Wallet {
         this.timestamp = timestamp;
     }
 
+    public static void recharge(Double rechargeAmount, OnRechargeComplete onRechargeComplete) {
+        
+    }
+
     public interface OnTransactionCompleteListener {
         void onComplete();
         void onError(String error);
@@ -153,5 +157,9 @@ public class Wallet {
     public interface OnWalletFetchCompletedListener {
         void onComplete(Wallet wallet);
         void onError(String s);
+    }
+
+    public interface OnRechargeComplete {
+        void onComplete(Double newBalance);
     }
 }

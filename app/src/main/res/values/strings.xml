@@ -37,5 +37,6 @@
     <string name="item_qty">Quantity: %d pc</string>
     <string name="item_amount">₹ %f/-</string>
     <string name="nfc_disabled">NFC is disabled.</string>
+    <string name="buy_credits">Buy Credits</string>
 
 </resources>
