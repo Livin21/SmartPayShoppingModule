@@ -1,8 +1,12 @@
 package com.smartpay.android.payment;
 
 import android.content.Context;
+import android.util.Log;
 
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.smartpay.android.shopping.util.Preferences;
 
 import java.util.HashMap;
@@ -14,17 +18,17 @@ import java.util.Random;
 
 
 public class Wallet {
-    private float balance;
+    private Double balance;
     private String address;
     private long timestamp;
 
-    private static final float BONUS_CREDIT = 500;
+    private static final Double BONUS_CREDIT = 500.0;
 
-    public float getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(float balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 
@@ -70,5 +74,32 @@ public class Wallet {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public static Wallet getWallet(Context context){
+        Wallet wallet =  new Wallet();
+        Task<DocumentSnapshot> documentFetch = FirebaseFirestore.getInstance().collection("wallets").document(Preferences.getDocumentReference(context)).get();
+        if (documentFetch.isSuccessful()){
+            DocumentSnapshot document = documentFetch.getResult();
+            wallet.setBalance(document.getDouble("balance"));
+            wallet.setAddress(document.getString("address"));
+        }else {
+            Log.d("Wallet","Not Created yet");
+        }
+        return wallet;
+    }
+
+    public void addTransaction(String toAddress, double billAmount, OnTransactionCompleteListener onTransactionCompleteListener) {
+        Transaction transaction = new Transaction.Builder()
+                .amount(billAmount)
+                .toAddress(toAddress)
+                .fromAddress(address)
+                .build();
+        transaction.execute(onTransactionCompleteListener);
+    }
+
+    public interface OnTransactionCompleteListener {
+        void onComplete();
+        void onError(String error);
     }
 }

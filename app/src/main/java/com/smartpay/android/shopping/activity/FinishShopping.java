@@ -11,7 +11,7 @@ import android.widget.TextView;
 import com.google.zxing.WriterException;
 
 import com.smartpay.android.R;
-import com.smartpay.android.nfc.AddressGrabberActivity;
+import com.smartpay.android.payment.nfc.AddressGrabberActivity;
 import com.smartpay.android.shopping.qrcode.QRCodeHandler;
 
 public class FinishShopping extends AppCompatActivity {

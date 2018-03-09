@@ -1,4 +1,4 @@
-package com.smartpay.android.nfc;
+package com.smartpay.android.payment.nfc;
 
 import android.app.Activity;
 import android.app.PendingIntent;
@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.smartpay.android.R;
+import com.smartpay.android.payment.qrcode.WalletAddressScannerActivity;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
@@ -29,6 +30,8 @@ public class AddressGrabberActivity extends AppCompatActivity {
 
     public static final String MIME_TEXT_PLAIN = "text/plain";
 
+    private double billAmount;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,9 +42,14 @@ public class AddressGrabberActivity extends AppCompatActivity {
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
+        billAmount = getIntent().getDoubleExtra("BILL_AMOUNT",0);
+
         if (mNfcAdapter == null) {
             // Stop here, we definitely need NFC
-            Toast.makeText(this, "This device doesn't support NFC.", Toast.LENGTH_LONG).show();
+            Toast.makeText(this, "This device doesn't support NFC. Switching to QR Cde mode.", Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(this, WalletAddressScannerActivity.class);
+            intent.putExtra("BILL_AMOUNT", billAmount);
+            startActivity(intent);
             finish();
             return;
         }
