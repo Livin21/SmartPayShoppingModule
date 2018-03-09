@@ -10,6 +10,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.smartpay.android.shopping.util.Preferences;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 /***
@@ -21,6 +23,15 @@ public class Wallet {
     private Double balance;
     private String address;
     private long timestamp;
+    private String documentReference;
+
+    public String getDocumentReference() {
+        return documentReference;
+    }
+
+    public void setDocumentReference(String documentReference) {
+        this.documentReference = documentReference;
+    }
 
     private static final Double BONUS_CREDIT = 500.0;
 
@@ -89,13 +100,32 @@ public class Wallet {
         return wallet;
     }
 
-    public void addTransaction(String toAddress, double billAmount, OnTransactionCompleteListener onTransactionCompleteListener) {
+    public void addTransaction(Context context, String toAddress, double billAmount, OnTransactionCompleteListener onTransactionCompleteListener) {
         Transaction transaction = new Transaction.Builder()
                 .amount(billAmount)
                 .toAddress(toAddress)
                 .fromAddress(address)
                 .build();
-        transaction.execute(onTransactionCompleteListener);
+        transaction.execute(context, onTransactionCompleteListener);
+    }
+
+    static Wallet getWallet(String address) {
+        Wallet wallet = new Wallet();
+        List<DocumentSnapshot> documents = FirebaseFirestore.getInstance().collection("wallets").get().getResult().getDocuments();
+        for (DocumentSnapshot document : documents) {
+            if (document.getString("address").equals(address)) {
+                wallet.setAddress(address);
+                wallet.setBalance(document.getDouble("balance"));
+                wallet.setTimestamp(document.getLong("timestamp"));
+                wallet.setDocumentReference(document.getReference().getId());
+                break;
+            }
+        }
+        return wallet;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public interface OnTransactionCompleteListener {
