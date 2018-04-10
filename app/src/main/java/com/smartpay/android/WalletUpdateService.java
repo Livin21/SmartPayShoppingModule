@@ -68,7 +68,7 @@ public class WalletUpdateService extends IntentService {
                         List<DocumentSnapshot> documents = task.getResult().getDocuments();
                         for (DocumentSnapshot d: documents){
 
-                            if (d.getString("address").equals(toAddress)){
+                            if (!toDone && d.getString("address").equals(toAddress)){
                                 HashMap<String, Object> update = new HashMap<>();
                                 update.put("balance", d.getDouble("balance") + billAmount);
                                 FirebaseFirestore.getInstance().collection("wallets")
@@ -76,7 +76,7 @@ public class WalletUpdateService extends IntentService {
                                 toDone = true;
                             }
 
-                            if (d.getString("address").equals(fromAddress)){
+                            if (!fromDone && d.getString("address").equals(fromAddress)){
                                 HashMap<String, Object> update = new HashMap<>();
                                 update.put("balance", d.getDouble("balance") - billAmount);
                                 FirebaseFirestore.getInstance().collection("wallets")
