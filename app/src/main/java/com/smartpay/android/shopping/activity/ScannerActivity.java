@@ -3,37 +3,32 @@ package com.smartpay.android.shopping.activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CompoundBarcodeView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.smartpay.android.R;
 import com.smartpay.android.shopping.SmartPay;
 import com.smartpay.android.shopping.util.Constants;
 import com.smartpay.android.shopping.util.Preferences;
+
+import org.json.JSONException;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ScannerActivity extends AppCompatActivity {
 
@@ -59,36 +54,30 @@ public class ScannerActivity extends AppCompatActivity {
                         Request.Method.GET,
                         shopsEndpointUrl,
                         null,
-                        new Response.Listener<JSONObject>() {
-                            @Override
-                            public void onResponse(JSONObject response) {
-                                progressDialog.dismiss();
-                                try {
-                                    Toast.makeText(ScannerActivity.this, "Connected to " + response.get("name").toString() + "\nHappy Shopping :)", Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(ScannerActivity.this,ShopActivity.class);
-                                    intent.putExtra("shopId", result.getText());
-                                    intent.putExtra("shopName", response.getString("name"));
-                                    startActivity(intent);
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                    Toast.makeText(ScannerActivity.this, "Invalid Code", Toast.LENGTH_SHORT).show();
-                                }finally {
-                                    finish();
-                                }
-                            }
-                        },
-                        new Response.ErrorListener() {
-                            @Override
-                            public void onErrorResponse(VolleyError error) {
+                        response -> {
+                            progressDialog.dismiss();
+                            try {
+                                Toast.makeText(ScannerActivity.this, "Connected to " + response.get("name").toString() + "\nHappy Shopping :)", Toast.LENGTH_LONG).show();
+                                Intent intent = new Intent(ScannerActivity.this,ShopActivity.class);
+                                intent.putExtra("shopId", result.getText());
+                                intent.putExtra("shopName", response.getString("name"));
+                                startActivity(intent);
+                            } catch (JSONException e) {
+                                e.printStackTrace();
                                 Toast.makeText(ScannerActivity.this, "Invalid Code", Toast.LENGTH_SHORT).show();
-                                error.printStackTrace();
-                                progressDialog.dismiss();
+                            }finally {
                                 finish();
                             }
+                        },
+                        error -> {
+                            Toast.makeText(ScannerActivity.this, "Invalid Code", Toast.LENGTH_SHORT).show();
+                            error.printStackTrace();
+                            progressDialog.dismiss();
+                            finish();
                         }
                 ){
                     @Override
-                    public Map<String, String> getHeaders() throws AuthFailureError {
+                    public Map<String, String> getHeaders() {
                         Map<String, String> headers = new HashMap<>();
                         headers.put("x-access-token", Preferences.getAuthToken(ScannerActivity.this));
                         return headers;

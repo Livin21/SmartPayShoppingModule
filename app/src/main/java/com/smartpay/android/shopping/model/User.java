@@ -117,19 +117,11 @@ public class User {
         StorageReference storageReference = FirebaseStorage.getInstance().getReference().child(FirebaseAuth.getInstance().getCurrentUser().getUid()+".jpg");
 
         UploadTask uploadTask = storageReference.putBytes(data);
-        uploadTask.addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                // Handle unsuccessful uploads
-                onUploadComplete.onError(exception);
-            }
-        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
-                Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                onUploadComplete.onUploadComplete(downloadUrl);
-            }
+        // Handle unsuccessful uploads
+        uploadTask.addOnFailureListener(onUploadComplete::onError).addOnSuccessListener(taskSnapshot -> {
+            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+            Uri downloadUrl = taskSnapshot.getDownloadUrl();
+            onUploadComplete.onUploadComplete(downloadUrl);
         });
     }
 
@@ -147,30 +139,22 @@ public class User {
                 Request.Method.GET,
                 Constants.BASE_URL + "users/i/" + emailId,
                 null,
-                new Response.Listener<JSONArray>() {
-                    @Override
-                    public void onResponse(JSONArray response) {
-                        try {
-                            firstName = response.getJSONObject(0).getString("fname");
-                            lastName = response.getJSONObject(0).getString("lname");
-                            joined = response.getJSONObject(0).getString("joined");
-                            city = response.getJSONObject(0).getString("city");
-                            phone = response.getJSONObject(0).getString("phone");
-                            dbPass = response.getJSONObject(0).getString("password");
+                response -> {
+                    try {
+                        firstName = response.getJSONObject(0).getString("fname");
+                        lastName = response.getJSONObject(0).getString("lname");
+                        joined = response.getJSONObject(0).getString("joined");
+                        city = response.getJSONObject(0).getString("city");
+                        phone = response.getJSONObject(0).getString("phone");
+                        dbPass = response.getJSONObject(0).getString("password");
 
-                            onFetchedListener.onFetchComplete(User.this);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            onFetchedListener.onError(e);
-                        }
+                        onFetchedListener.onFetchComplete(User.this);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        onFetchedListener.onError(e);
                     }
                 },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        onFetchedListener.onError(error);
-                    }
-                }
+                onFetchedListener::onError
         );
 
         jsonArrayRequest.setRetryPolicy(new DefaultRetryPolicy(
@@ -193,43 +177,32 @@ public class User {
                 Request.Method.PUT,
                 Constants.BASE_URL + "users/email/" + emailId,
                 new JSONObject(params),
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        try {
-                            if (response.getBoolean("status")){
-                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                        .setDisplayName(firstName + " " + lastName)
-                                        .setPhotoUri(photoUrl)
-                                        .build();
-                                FirebaseAuth.getInstance().getCurrentUser()
-                                        .updateProfile(profileUpdates)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()) {
-                                                    onSavedListener.onSaveComplete();
-                                                }
-                                            }
-                                        });
-                            }else {
-                                onSavedListener.onError();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                response -> {
+                    try {
+                        if (response.getBoolean("status")){
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(firstName + " " + lastName)
+                                    .setPhotoUri(photoUrl)
+                                    .build();
+                            FirebaseAuth.getInstance().getCurrentUser()
+                                    .updateProfile(profileUpdates)
+                                    .addOnCompleteListener(task -> {
+                                        if (task.isSuccessful()) {
+                                            onSavedListener.onSaveComplete();
+                                        }
+                                    });
+                        }else {
                             onSavedListener.onError();
                         }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                         onSavedListener.onError();
                     }
-                }
+                },
+                error -> onSavedListener.onError()
         ){
             @Override
-            public Map<String, String> getHeaders() throws AuthFailureError {
+            public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
                 headers.put("x-access-token", Preferences.getAuthToken(context));
                 return headers;

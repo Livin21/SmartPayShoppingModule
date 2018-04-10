@@ -83,6 +83,8 @@ public class Profile extends AppCompatActivity {
         user = new User(firebaseUser.getEmail());
 
         final ProgressDialog progressDialog = new ProgressDialog(this);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
+        progressDialog.setIndeterminate(true);
         progressDialog.setMessage("Fetching Details...");
         progressDialog.setCancelable(false);
         progressDialog.show();

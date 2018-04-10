@@ -1,6 +1,5 @@
 package com.smartpay.android.payment.qrcode;
 
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -15,6 +14,7 @@ import com.google.zxing.ResultPoint;
 import com.journeyapps.barcodescanner.BarcodeCallback;
 import com.journeyapps.barcodescanner.BarcodeResult;
 import com.journeyapps.barcodescanner.CompoundBarcodeView;
+import com.lmntrx.android.library.livin.missme.ProgressDialog;
 import com.smartpay.android.R;
 import com.smartpay.android.payment.Wallet;
 import com.smartpay.android.payment.WalletActivity;
@@ -25,6 +25,7 @@ public class WalletAddressScannerActivity extends AppCompatActivity {
 
     CompoundBarcodeView barcodeView;
 
+    ProgressDialog progressDialog;
 
     private double billAmount;
 
@@ -33,7 +34,7 @@ public class WalletAddressScannerActivity extends AppCompatActivity {
         public void barcodeResult(final BarcodeResult result) {
             if (result.getBarcodeFormat().equals(BarcodeFormat.QR_CODE)) {
                 barcodeView.pause();
-                final ProgressDialog progressDialog = new ProgressDialog(WalletAddressScannerActivity.this);
+                progressDialog = new ProgressDialog(WalletAddressScannerActivity.this);
                 progressDialog.setMessage("Processing Payment. Please Wait...");
                 progressDialog.setCancelable(false);
                 progressDialog.show();
@@ -136,5 +137,15 @@ public class WalletAddressScannerActivity extends AppCompatActivity {
             barcodeView.pause();
         } catch (NullPointerException ignored) {
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        progressDialog.onBackPressed(
+                () -> {
+                    super.onBackPressed();
+                    return null;
+                }
+        );
     }
 }

@@ -4,17 +4,15 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.smartpay.android.shopping.util.Preferences;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 /***
@@ -92,52 +90,48 @@ public class Wallet {
 
     public static void getWallet(Context context, final Wallet.OnWalletFetchCompletedListener listener){
         Task<DocumentSnapshot> documentFetch = FirebaseFirestore.getInstance().collection("wallets").document(Preferences.getDocumentReference(context)).get();
-        documentFetch.addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot document = task.getResult();
-                    Wallet wallet =  new Wallet();
-                    wallet.setBalance(document.getDouble("balance"));
-                    wallet.setAddress(document.getString("address"));
-                    listener.onComplete(wallet);
-                }else {
-                    Log.d("Wallet","Not Created yet");
-                    listener.onError("No Wallet Found");
-                }
+        documentFetch.addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
+                DocumentSnapshot document = task.getResult();
+                Wallet wallet =  new Wallet();
+                wallet.setBalance(document.getDouble("balance"));
+                wallet.setAddress(document.getString("address"));
+                listener.onComplete(wallet);
+            }else {
+                Log.d("Wallet","Not Created yet");
+                listener.onError("No Wallet Found");
             }
         });
     }
 
     public void addTransaction(Context context, String toAddress, double billAmount, OnTransactionCompleteListener onTransactionCompleteListener) {
-        Transaction transaction = new Transaction.Builder()
+        new Transaction.Builder()
                 .amount(billAmount)
                 .toAddress(toAddress)
                 .fromAddress(address)
-                .build();
-        transaction.execute(context, onTransactionCompleteListener);
+                .build()
+                .execute(context, onTransactionCompleteListener);
     }
 
     static void getWallet(final String address, final Wallet.OnWalletFetchCompletedListener listener) {
-        FirebaseFirestore.getInstance().collection("wallets").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()){
+        FirebaseFirestore.getInstance().collection("wallets").get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()){
 
-                    List<DocumentSnapshot> documents = task.getResult().getDocuments();
-                    for (DocumentSnapshot document : documents) {
-                        if (document.getString("address").equals(address)) {
-                            Wallet wallet = new Wallet();
-                            wallet.setAddress(address);
-                            wallet.setBalance(document.getDouble("balance"));
-                            wallet.setTimestamp(document.getLong("timestamp"));
-                            wallet.setDocumentReference(document.getReference().getId());
-                            listener.onComplete(wallet);
-                            break;
-                        }
+                List<DocumentSnapshot> documents = task.getResult().getDocuments();
+                for (DocumentSnapshot document : documents) {
+                    if (document.getString("address").equals(address)) {
+                        Wallet wallet = new Wallet();
+                        wallet.setAddress(address);
+                        wallet.setBalance(document.getDouble("balance"));
+                        wallet.setTimestamp(document.getLong("timestamp"));
+                        wallet.setDocumentReference(document.getReference().getId());
+                        listener.onComplete(wallet);
+                        break;
                     }
                 }
             }
+        }).addOnFailureListener(e -> {
+
         });
     }
 
@@ -153,12 +147,9 @@ public class Wallet {
         hashMap.put("last_recharge", System.currentTimeMillis());
         FirebaseFirestore.getInstance().collection("wallets").document(wallet.getDocumentReference())
                 .update(hashMap).addOnCompleteListener(
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
-                            onRechargeComplete.onComplete(wallet.getBalance() + rechargeAmount);
-                        }
+                task -> {
+                    if (task.isSuccessful()){
+                        onRechargeComplete.onComplete(wallet.getBalance() + rechargeAmount);
                     }
                 }
         );
