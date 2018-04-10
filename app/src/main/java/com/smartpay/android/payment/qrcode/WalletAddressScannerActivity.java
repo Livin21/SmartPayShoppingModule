@@ -18,6 +18,7 @@ import com.lmntrx.android.library.livin.missme.ProgressDialog;
 import com.smartpay.android.R;
 import com.smartpay.android.payment.Wallet;
 import com.smartpay.android.payment.WalletActivity;
+import com.smartpay.android.shopping.activity.MainActivity;
 
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class WalletAddressScannerActivity extends AppCompatActivity {
                                 public void onComplete() {
                                     progressDialog.dismiss();
                                     Toast.makeText(WalletAddressScannerActivity.this, "Payment Complete", Toast.LENGTH_SHORT).show();
-                                    startActivity(new Intent(WalletAddressScannerActivity.this, WalletActivity.class));
+                                    startActivity(new Intent(WalletAddressScannerActivity.this, MainActivity.class));
                                     finish();
                                 }
 
