@@ -33,6 +33,7 @@ public class WalletAddressScannerActivity extends AppCompatActivity {
     BarcodeCallback barcodeCallback = new BarcodeCallback() {
         @Override
         public void barcodeResult(final BarcodeResult result) {
+            Toast.makeText(WalletAddressScannerActivity.this, result.getResult().getText(), Toast.LENGTH_SHORT).show();
             if (result.getBarcodeFormat().equals(BarcodeFormat.QR_CODE)) {
                 barcodeView.pause();
                 progressDialog = new ProgressDialog(WalletAddressScannerActivity.this);

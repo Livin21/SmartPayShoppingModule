@@ -1,15 +1,12 @@
 package com.smartpay.android;
 
 import android.app.IntentService;
-import android.content.Intent;
 import android.content.Context;
-import android.support.annotation.NonNull;
+import android.content.Intent;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QuerySnapshot;
+import com.smartpay.android.payment.Transaction;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,6 +18,7 @@ public class WalletUpdateService extends IntentService {
     private static final String EXTRA_TO_ADDRESS = "com.smartpay.android.extra.TO_ADDRESS";
     private static final String EXTRA_FROM_ADRESS = "com.smartpay.android.extra.FROM_ADDRESS";
     private static final String EXTRA_BILL_AMOUNT = "com.smartpay.android.extra.BILL_AMOUNT";
+    private static final String EXTRA_TIMESTAMP = "com.smartpay.android.extra.TIMESTAMP";
 
     public WalletUpdateService() {
         super("WalletUpdateService");
@@ -32,12 +30,14 @@ public class WalletUpdateService extends IntentService {
      *
      * @see IntentService
      */
-    public static void updateWallets(Context context, String toWallet, String fromWallet, double amount) {
+
+    public static void updateWallets(Context context, String toAddress, String fromAddress, Double amount, Long when) {
         Intent intent = new Intent(context, WalletUpdateService.class);
         intent.setAction(ACTION_UPDATE_WALLETS);
-        intent.putExtra(EXTRA_TO_ADDRESS, toWallet);
-        intent.putExtra(EXTRA_FROM_ADRESS, fromWallet);
+        intent.putExtra(EXTRA_TO_ADDRESS, toAddress);
+        intent.putExtra(EXTRA_FROM_ADRESS, fromAddress);
         intent.putExtra(EXTRA_BILL_AMOUNT, amount);
+        intent.putExtra(EXTRA_TIMESTAMP, when);
         context.startService(intent);
     }
 
@@ -49,7 +49,8 @@ public class WalletUpdateService extends IntentService {
                 final String toAddress = intent.getStringExtra(EXTRA_TO_ADDRESS);
                 final String fromAddress = intent.getStringExtra(EXTRA_FROM_ADRESS);
                 final double billAmount = intent.getDoubleExtra(EXTRA_BILL_AMOUNT, 0.0);
-                handleActionUpdateWallets(toAddress, fromAddress, billAmount);
+                final Long timeStamp = intent.getLongExtra(EXTRA_TIMESTAMP, System.currentTimeMillis());
+                handleActionUpdateWallets(toAddress, fromAddress, billAmount, timeStamp);
             }
         }
     }
@@ -58,7 +59,7 @@ public class WalletUpdateService extends IntentService {
      * Handle action Foo in the provided background thread with the provided
      * parameters.
      */
-    private void handleActionUpdateWallets(String toAddress, String fromAddress, double billAmount) {
+    private void handleActionUpdateWallets(String toAddress, String fromAddress, double billAmount, Long timestamp) {
 
         FirebaseFirestore.getInstance().collection("wallets")
                 .get().addOnCompleteListener(
@@ -74,6 +75,17 @@ public class WalletUpdateService extends IntentService {
                                 FirebaseFirestore.getInstance().collection("wallets")
                                         .document(d.getId()).update(update);
                                 toDone = true;
+
+                                Transaction transaction = new Transaction();
+                                transaction.setAmount(billAmount);
+                                transaction.toAddress = toAddress;
+                                transaction.fromAddress = fromAddress;
+                                transaction.when = timestamp;
+
+                                FirebaseFirestore.getInstance().collection("wallets")
+                                        .document(d.getId()).collection("transactions")
+                                        .add(transaction);
+
                             }
 
                             if (!fromDone && d.getString("address").equals(fromAddress)){

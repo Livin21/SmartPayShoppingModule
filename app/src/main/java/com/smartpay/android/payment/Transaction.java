@@ -51,13 +51,14 @@ public class Transaction implements Serializable {
                         Log.d("TransactionProcessing", "Transaction Added");
                         onTransactionCompleteListener.onComplete();
 
-                        WalletUpdateService.updateWallets(context, toAddress, fromAddress, amount);
+                        WalletUpdateService.updateWallets(context, toAddress, fromAddress, amount, when);
 
                     } else {
                         onTransactionCompleteListener.onError("Transaction couldn't be completed");
                     }
                 })
                 .addOnFailureListener(e -> onTransactionCompleteListener.onError(e.getMessage()));
+
     }
 
     static class Builder {

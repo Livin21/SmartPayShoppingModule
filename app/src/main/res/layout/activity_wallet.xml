@@ -37,13 +37,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
-        android:onClick="generatePrivateKey"
-        android:text="@string/generate_new_private_key"/>
-
-    <Button
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
         android:onClick="rechargeWallet"
         android:text="@string/buy_credits"/>
 
