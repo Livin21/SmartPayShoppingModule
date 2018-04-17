@@ -12,6 +12,7 @@ import com.google.zxing.WriterException;
 
 import com.smartpay.android.R;
 import com.smartpay.android.payment.nfc.AddressGrabberActivity;
+import com.smartpay.android.payment.nfc.BeamPayActivity;
 import com.smartpay.android.shopping.qrcode.QRCodeHandler;
 
 public class FinishShopping extends AppCompatActivity {
@@ -46,7 +47,7 @@ public class FinishShopping extends AppCompatActivity {
     }
 
     public void launchPaymentModule(View view) {
-        Intent intent = new Intent(this, AddressGrabberActivity.class);
+        Intent intent = new Intent(this, BeamPayActivity.class);
         intent.putExtra("BILL_AMOUNT", amt);
         startActivity(intent);
     }

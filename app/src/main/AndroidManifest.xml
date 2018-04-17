@@ -70,24 +70,21 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".shopping.activity.MainActivity" />
         </activity>
-        <activity android:name=".payment.nfc.AddressGrabberActivity">
+        <activity android:name=".payment.qrcode.WalletAddressScannerActivity" />
+
+        <activity android:name=".payment.nfc.BeamPayActivity" >
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
-                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/vnd.com.smartpay.android" />
             </intent-filter>
-
-            <meta-data
-                android:name="android.nfc.action.TECH_DISCOVERED"
-                android:resource="@xml/nfc_tech_filter" />
         </activity>
-        <activity android:name=".payment.qrcode.WalletAddressScannerActivity" />
 
         <service
             android:name=".WalletUpdateService"
-            android:exported="false"></service>
+            android:exported="false"/>
     </application>
 
 </manifest>
