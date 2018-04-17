@@ -38,5 +38,6 @@
     <string name="item_amount">₹ %f/-</string>
     <string name="nfc_disabled">NFC is disabled.</string>
     <string name="buy_credits">Buy Credits</string>
+    <string name="switch_to_qr_code_mode">Switch to QR Code Mode</string>
 
 </resources>

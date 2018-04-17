@@ -10,8 +10,8 @@ import android.nfc.NfcAdapter;
 import android.nfc.Tag;
 import android.nfc.tech.Ndef;
 import android.os.AsyncTask;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -59,6 +59,14 @@ public class AddressGrabberActivity extends AppCompatActivity {
         }
 
         handleIntent(getIntent());
+
+
+        findViewById(R.id.switchModeButton).setOnClickListener(v -> {
+            Intent intent = new Intent(this, WalletAddressScannerActivity.class);
+            intent.putExtra("BILL_AMOUNT", billAmount);
+            startActivity(intent);
+            finish();
+        });
 
     }
 
