@@ -25,12 +25,14 @@
 
 package com.smartpay.android.payment.nfc
 
+import android.app.PendingIntent
 import android.content.Intent
 import android.nfc.NdefMessage
 import android.nfc.NdefRecord
 import android.nfc.NdefRecord.createMime
 import android.nfc.NfcAdapter
 import android.nfc.NfcEvent
+import android.nfc.tech.Ndef
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.widget.Button
@@ -48,6 +50,13 @@ class BeamPayActivity : AppCompatActivity(), NfcAdapter.CreateNdefMessageCallbac
     private var mNfcAdapter: NfcAdapter? = null
 
     private var billAmount = 0.0
+
+
+    private var mPendingIntent: PendingIntent? = null
+
+    private val mTechLists = arrayOf(
+            arrayOf(Ndef::class.java.name)
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -68,6 +77,13 @@ class BeamPayActivity : AppCompatActivity(), NfcAdapter.CreateNdefMessageCallbac
             return
         }
 
+        val intent = Intent(this, BeamPayActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_HISTORY)
+        mPendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
+        mNfcAdapter?.enableForegroundDispatch(this, mPendingIntent, null, mTechLists)
+
+
         if (!mNfcAdapter!!.isEnabled) {
             findViewById<TextView>(R.id.errorText).setText(R.string.nfc_disabled)
         }
@@ -78,8 +94,8 @@ class BeamPayActivity : AppCompatActivity(), NfcAdapter.CreateNdefMessageCallbac
 
 
         findViewById<Button>(R.id.switchModeButton).setOnClickListener {
-            val intent = Intent(this@BeamPayActivity, WalletActivity::class.java)
-            startActivity(intent)
+            val i = Intent(this@BeamPayActivity, WalletActivity::class.java)
+            startActivity(i)
             finish()
         }
 
